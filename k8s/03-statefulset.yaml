@@ -16,31 +16,20 @@ spec:
     spec:
       containers:
       - name: redis
-        image: redis:5
+        image: entropypool/redis:5
+        imagePullPolicy: Always
         ports:
         - containerPort: 6379
           name: redis
         volumeMounts:
         - name: data
           mountPath: /data
-          #        - name: script
-          #          mountPath: /script/launch.sh
-          #          subPath: launch.sh
         env:
         - name: REDIS_PASSWORD
           valueFrom:
             secretKeyRef:
               name: redis-password
               key: password
-              #        command:
-              #        - sh
-              #        - -c
-              #        - |
-              #          if [ "${HOSTNAME}" == "redis-0" ]; then
-              #            redis-server --requirepass ${REDIS_PASSWORD}
-              #          else
-              #            redis-server --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
-              #          fi
       volumes:
       - name: script
         configMap:

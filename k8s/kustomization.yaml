@@ -2,7 +2,6 @@ commonLabels:
   # app: traefik-ingress
 
 resources:
-- 01-secret.yaml
-- 02-configmap.yaml
-- 03-headless-service.yaml
-- 04-statefulset.yaml
+- 01-configmap.yaml
+- 02-headless-service.yaml
+- 03-statefulset.yaml

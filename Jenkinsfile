@@ -37,6 +37,10 @@ pipeline {
         expression { DEPLOY_TARGET == 'true' }
       }
       steps {
+        sh (returnStdout: true, script: '''
+          export REDIS_PASSWORD=$REDIS_PASSWORD
+          envsubst < k8s/secret.yaml | kubectl apply -f -
+        '''.stripIndent())
         sh 'kubectl apply -k k8s'
       }
     }
