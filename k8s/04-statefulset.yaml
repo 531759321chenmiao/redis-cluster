@@ -32,15 +32,15 @@ spec:
             secretKeyRef:
               name: redis-password
               key: password
-        command:
-        - sh
-        - -c
-        - |
-          if [ "${HOSTNAME}" == "redis-0" ]; then
-            redis-server --requirepass ${REDIS_PASSWORD}
-          else
-            redis-server --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
-          fi 
+              #        command:
+              #        - sh
+              #        - -c
+              #        - |
+              #          if [ "${HOSTNAME}" == "redis-0" ]; then
+              #            redis-server --requirepass ${REDIS_PASSWORD}
+              #          else
+              #            redis-server --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
+              #          fi
       volumes:
       - name: script
         configMap:

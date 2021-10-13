@@ -19,7 +19,7 @@ pipeline {
       }
       steps {
         sh 'mkdir -p .docker-tmp; cp /usr/bin/consul .docker-tmp'
-        sh 'docker build -t entropypool/redis:5-alpine .'
+        sh 'docker build -t entropypool/redis:5 .'
       }
     }
 
@@ -28,7 +28,7 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh 'docker push entropypool/redis:5-alpine'
+        sh 'docker push entropypool/redis:5'
       }
     }
 
