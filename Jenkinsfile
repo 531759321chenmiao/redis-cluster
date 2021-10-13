@@ -32,7 +32,7 @@ pipeline {
       }
     }
 
-    stage('Deploy mysql cluster') {
+    stage('Deploy redis cluster') {
       when {
         expression { DEPLOY_TARGET == 'true' }
       }
