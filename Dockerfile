@@ -2,8 +2,8 @@ FROM redis:5-alpine
 
 RUN mkdir -p /usr/local/bin
 
-RUN apt-get update -y
-RUN apt-get install curl -y
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN apk add curl
 
 COPY .docker-tmp/consul /usr/bin/consul
 COPY docker-entrypoint.sh /usr/local/bin
