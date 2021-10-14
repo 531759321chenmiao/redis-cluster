@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT} consul services register -address=redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local -name=redis.npool.top -port=6379
 
