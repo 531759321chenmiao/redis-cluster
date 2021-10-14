@@ -28,7 +28,14 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh 'docker push entropypool/redis:5'
+        sh(returnStdout: true, script: '''
+          while true; do
+            docker push entropypool/redis:5
+            if [ $? -eq 0 ]; then
+              break
+            fi
+          done
+        '''.stripIndent())
       }
     }
 
