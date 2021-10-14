@@ -38,9 +38,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-              #        ports:
-              #        - containerPort: 6379
-              #          name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
         volumeMounts:
         - name: data
           mountPath: /data
