@@ -17,7 +17,7 @@ spec:
       containers:
       - name: redis
         image: entropypool/redis:5
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: ENV_ENVIRONMENT_TARGET
           valueFrom:
