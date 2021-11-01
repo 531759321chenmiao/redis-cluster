@@ -19,6 +19,12 @@ pipeline {
       }
       steps {
         sh 'mkdir -p .docker-tmp; cp /usr/bin/consul .docker-tmp'
+        sh(returnStdout: true, script: '''
+          images=`docker images | grep entropypool | grep redis | awk '{ print $3 }'`
+          for image in $images; do
+            docker rmi $image
+          done
+        '''.stripIndent())
         sh 'docker build -t entropypool/redis:5 .'
       }
     }
