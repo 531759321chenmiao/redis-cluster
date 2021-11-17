@@ -1,11 +1,41 @@
 #!/bin/sh
 
-CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT} consul services register -address=redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local -name=redis.npool.top -port=6379
+my_hostname=`hostname`
+my_ip=`hostname -i`
+export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 
-if [ ! $? -eq 0 ]; then
-  echo "FAIL TO REGISTER ME TO CONSUL"
-  exit 1
-fi
+function register_service() {
+  while true; do
+
+    if [ "${HOSTNAME}" == "redis-0" ]; then
+      my_id=$my_hostname.redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
+    else
+      my_id=$my_hostname.redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
+    fi
+
+    consul services deregister -id=$my_id
+    if [ "${HOSTNAME}" == "redis-0" ]; then
+      my_id_name=redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
+      my_name=redis.npool.top
+    else
+      my_id_name=redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
+      my_name=redis-ro.npool.top
+    fi
+
+    my_id=${my_hostname}.$my_id_name
+    consul services register -address=$my_ip -port=6379 -name=$my_name -id=$my_id
+    if [ ! $? -eq 0 ]; then
+      echo "Fail to register $my_name with address $my_hostname"
+      sleep 2
+      continue
+    fi
+
+    sleep 2
+
+  done
+}
+
+register_service &
 
 if [ "${HOSTNAME}" == "redis-0" ]; then
   redis-server --requirepass ${REDIS_PASSWORD}
