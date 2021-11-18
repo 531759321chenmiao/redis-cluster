@@ -5,11 +5,17 @@ my_ip=`hostname -i`
 export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 
 function register_service() {
-  last_state=1
+  last_state=unknow
   while true; do
     role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}')
     if [ ! $? -eq 0 ]; then
       echo "Wait for redis daemon ready"
+      sleep 10
+      continue
+    fi
+
+    if [ "x$role" != "xmaster" && "x$role" != "xslave" ]; then
+      echo "Invalid role: $role"
       sleep 10
       continue
     fi
