@@ -15,12 +15,10 @@ function register_service() {
     fi
 
     case $role in
-      master)
-	;;
-      slave)
+      master* | slave*)
 	;;
       *)
-        echo "Invalid role: $role"
+	echo "Invalid role: ($role)"
         sleep 10
         continue
 	;;
