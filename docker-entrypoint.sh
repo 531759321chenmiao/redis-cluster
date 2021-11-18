@@ -15,7 +15,9 @@ function register_service() {
     fi
 
     case $role in
-      master|slave)
+      master)
+	;;
+      slave)
 	;;
       *)
         echo "Invalid role: $role"
