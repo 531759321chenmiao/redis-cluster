@@ -14,7 +14,7 @@ function register_service() {
       continue
     fi
 
-    if [ "x$role" != "xmaster" && "x$role" != "xslave" ]; then
+    if [ "x$role" != "xmaster" -a "x$role" != "xslave" ]; then
       echo "Invalid role: $role"
       sleep 10
       continue
