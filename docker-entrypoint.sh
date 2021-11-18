@@ -7,7 +7,7 @@ export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 function register_service() {
   last_state=unknow
   while true; do
-    role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}')
+    role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}' | tr -cd [a-zA-Z0-9])
     if [ ! $? -eq 0 ]; then
       echo "Wait for redis daemon ready"
       sleep 10
@@ -15,7 +15,7 @@ function register_service() {
     fi
 
     case $role in
-      master* | slave*)
+      master | slave)
 	;;
       *)
 	echo "Invalid role: ($role)"
@@ -24,19 +24,19 @@ function register_service() {
 	;;
     esac
 
-    if [ "x$last_state" == "x$role*" ]; then
+    if [ "x$last_state" == "x$role" ]; then
       sleep 2
       continue
     fi
 
-    if [ "x$last_state" == "xslave*" ]; then
+    if [ "x$last_state" == "xslave" ]; then
       my_id=$my_hostname.redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
     else
       my_id=$my_hostname.redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
     fi
 
     consul services deregister -id=$my_id
-    if [ "x$role" == "xslave*" ]; then
+    if [ "x$role" == "xslave" ]; then
       my_id_name=redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
       my_name=redis-ro.npool.top
     else
