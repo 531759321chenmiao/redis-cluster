@@ -35,12 +35,14 @@ pipeline {
       }
       steps {
         sh(returnStdout: true, script: '''
+          set +e
           while true; do
             docker push entropypool/redis:5
             if [ $? -eq 0 ]; then
               break
             fi
           done
+          set -e
         '''.stripIndent())
       }
     }
