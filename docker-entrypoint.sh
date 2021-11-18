@@ -24,19 +24,19 @@ function register_service() {
 	;;
     esac
 
-    if [ "x$last_state" ~= "x$role" ]; then
+    if [ "x$last_state" == "x$role*" ]; then
       sleep 2
       continue
     fi
 
-    if [ "x$last_state" ~= "xslave" ]; then
+    if [ "x$last_state" == "xslave*" ]; then
       my_id=$my_hostname.redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
     else
       my_id=$my_hostname.redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
     fi
 
     consul services deregister -id=$my_id
-    if [ "x$role" ~= "xslave" ]; then
+    if [ "x$role" == "xslave*" ]; then
       my_id_name=redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
       my_name=redis-ro.npool.top
     else
