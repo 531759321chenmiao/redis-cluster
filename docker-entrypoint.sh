@@ -7,7 +7,7 @@ export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 function register_service() {
   last_state=unknow
   while true; do
-    role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}')
+    role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}' | sed -i 's/ //g')
     if [ ! $? -eq 0 ]; then
       echo "Wait for redis daemon ready"
       sleep 10
