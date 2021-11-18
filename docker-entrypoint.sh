@@ -6,15 +6,21 @@ export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 
 function register_service() {
   while true; do
+    role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}')
+    if [ ! $? -eq 0 ]; then
+      echo "Wait for redis daemon ready"
+      sleep 10
+      continue
+    fi
 
-    if [ "${HOSTNAME}" == "redis-0" ]; then
-      my_id=$my_hostname.redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
-    else
+    if [ "x$role" == "xslave" ]; then
       my_id=$my_hostname.redis-ro.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
+    else
+      my_id=$my_hostname.redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
     fi
 
     consul services deregister -id=$my_id
-    if [ "${HOSTNAME}" == "redis-0" ]; then
+    if [ "x$role" == "xmaster" ]; then
       my_id_name=redis.${ENV_CLUSTER_NAMESPACE}.svc.cluster.local
       my_name=redis.npool.top
     else
