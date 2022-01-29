@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: entropypool/redis:5
+        image: uhub.service.ucloud.cn/entropypool/redis:5
         imagePullPolicy: IfNotPresent
         env:
         - name: ENV_ENVIRONMENT_TARGET
