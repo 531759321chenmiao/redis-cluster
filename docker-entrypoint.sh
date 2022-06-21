@@ -63,7 +63,7 @@ function register_service() {
 register_service &
 
 if [ "${HOSTNAME}" == "redis-0" ]; then
-  redis-server /etc/redis.conf --requirepass ${REDIS_PASSWORD}
+  redis-server /etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
 else
-  redis-server /etc/redis.conf --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
+  redis-server /etc/redis/redis.conf --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
 fi

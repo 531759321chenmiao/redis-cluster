@@ -50,14 +50,12 @@ spec:
             - name: data
               mountPath: /data
             - name: redis-conf
-              mountPath: /etc
+              mountPath: /etc/redis
+              readOnly: true
       volumes:
         - name: redis-conf
           configMap:
             name: redis-conf
-            items:
-            - key: redis-conf
-              path: redis.conf
   volumeClaimTemplates:
     - metadata:
         name: data
