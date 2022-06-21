@@ -37,7 +37,7 @@ appenddirname "/data"
 appendfsync everysec
 ```
 
-#### 碎片整理相关
+#### 碎片整理
 ```conf
 # Active defragmentation is disabled by default
 activedefrag yes
