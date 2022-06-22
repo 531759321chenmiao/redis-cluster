@@ -1,11 +1,5 @@
 pipeline {
   agent any
-  environment {
-    GOPROXY = 'https://goproxy.cn,direct'
-  }
-  tools {
-    go 'go'
-  }
   stages {
     stage('Clone redis cluster') {
       steps {

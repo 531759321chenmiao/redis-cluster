@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+set -eo pipefail
+shopt -snullglob
 
 my_hostname=`hostname`
 my_ip=`hostname -i`
@@ -7,7 +9,7 @@ export CONSUL_HTTP_ADDR=${ENV_CONSUL_HOST}:${ENV_CONSUL_PORT}
 function register_service() {
   last_state=unknow
   while true; do
-    role=$(redis-cli -a $REDIS_PASSWORD info replication | grep "role" | awk -F ":" '{print $2}' | tr -cd [a-zA-Z0-9])
+    role=$(redis-cli -a $REDIS_PASSWORD role | head -n 1)
     if [ ! $? -eq 0 ]; then
       echo "Wait for redis daemon ready"
       sleep 10
@@ -61,7 +63,7 @@ function register_service() {
 register_service &
 
 if [ "${HOSTNAME}" == "redis-0" ]; then
-  redis-server --requirepass ${REDIS_PASSWORD}
+  redis-server /etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
 else
-  redis-server --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
+  redis-server /etc/redis/redis.conf --slaveof redis-0.redis 6379 --masterauth ${REDIS_PASSWORD} --requirepass ${REDIS_PASSWORD}
 fi
