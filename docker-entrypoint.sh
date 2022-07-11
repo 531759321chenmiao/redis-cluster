@@ -1,6 +1,5 @@
 #!/bin/sh
 set -eo pipefail
-shopt -snullglob
 
 my_hostname=`hostname`
 my_ip=`hostname -i`
