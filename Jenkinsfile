@@ -19,7 +19,7 @@ pipeline {
             docker rmi $image
           done
         '''.stripIndent())
-        sh 'docker build -t uhub.service.ucloud.cn/entropypool/redis:5 .'
+        sh 'docker build -t uhub.service.ucloud.cn/entropypool/redis:5-alpine20220711 .'
       }
     }
 
@@ -31,7 +31,7 @@ pipeline {
         sh(returnStdout: true, script: '''
           set +e
           while true; do
-            docker push uhub.service.ucloud.cn/entropypool/redis:5
+            docker push uhub.service.ucloud.cn/entropypool/redis:5-alpine20220711
             if [ $? -eq 0 ]; then
               break
             fi
