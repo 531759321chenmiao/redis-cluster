@@ -1,5 +1,4 @@
 #!/bin/sh
-set -eo pipefail
 
 my_hostname=`hostname`
 my_ip=`hostname -i`
