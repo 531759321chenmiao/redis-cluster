@@ -1,11 +1,5 @@
 pipeline {
   agent any
-  environment {
-    GOPROXY = 'https://goproxy.cn,direct'
-  }
-  tools {
-    go 'go'
-  }
   stages {
     stage('Clone redis cluster') {
       steps {
@@ -25,7 +19,7 @@ pipeline {
             docker rmi $image
           done
         '''.stripIndent())
-        sh 'docker build -t entropypool/redis:5 .'
+        sh 'docker build -t uhub.service.ucloud.cn/entropypool/redis:5-alpine20220711 .'
       }
     }
 
@@ -35,12 +29,14 @@ pipeline {
       }
       steps {
         sh(returnStdout: true, script: '''
+          set +e
           while true; do
-            docker push entropypool/redis:5
+            docker push uhub.service.ucloud.cn/entropypool/redis:5-alpine20220711
             if [ $? -eq 0 ]; then
               break
             fi
           done
+          set -e
         '''.stripIndent())
       }
     }

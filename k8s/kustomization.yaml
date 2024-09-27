@@ -1,7 +1,12 @@
-commonLabels:
-  # app: traefik-ingress
+namespace: kube-system
 
 resources:
-- 01-configmap.yaml
-- 02-headless-service.yaml
-- 03-statefulset.yaml
+  - 01-headless-service.yaml
+  - 02-statefulset.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+  - name: redis-conf
+    files:
+      - redis.conf
